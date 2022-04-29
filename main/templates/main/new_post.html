@@ -1,19 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>글쓰기 페이지</title>
 </head>
 <body>
     <h1>글쓰기 페이지</h1>
-    <form method="POST">
-        {% csrf_token %}
-        제목<br>
-        <input type="text" name="postname"><br>
-        내용<br>
-        <textarea rows="10" cols="50" name="contents"></textarea><br>
-        <input type="file" name="mainphoto"><br>
-        <input type="submit" value="글쓰기">
+    <form method="POST" class="my-3">
+        <div class="mb-3"></div>
+            {% csrf_token %}
+
+            <label for="content" class="form-lablel">제목</label>
+            <input type="text" name="postname" id="content" class="form-control" rows="1" ></textarea>
+            
+            <label for="content" class="form-lablel">내용</label>
+            <textarea name="contents" id="content" class="form-control" rows="10" ></textarea>
+            
+            <input type="file" name="mainphoto">
+            <br>
+            <input type="submit" value="글쓰기" class="btn btn-primary">
+        </div>
     </form>
 </body>
 </html>
+{% endblock %}

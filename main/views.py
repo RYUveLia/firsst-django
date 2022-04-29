@@ -28,13 +28,14 @@ def new_post(request):
                 contents=request.POST['contents'],
                 #mainphoto=request.POST['mainphoto'],
             )
-        return redirect('/blog/')
+        return render(request, 'main/posting.html', {'post': new_article})
     else:
         return render(request, 'main/new_post.html')
 
 def remove_post(request, pk):
     post = Post.objects.get(pk=pk)
-    if request.method() == 'POST':
+    if request.method == 'POST':
         post.delete()
         return redirect('/blog')
     return render(request, 'main/remove_post.html', {'Post': post})
+

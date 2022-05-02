@@ -4,6 +4,8 @@
 <h1>로그인</h1>
 <form method="post" action="{% url 'users:login' %}">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
+    {% include 'users/form_errors.html' %}
     <div>
         <label>사용자 ID</label>
         <input type="text" name="username" id="username">
@@ -13,13 +15,6 @@
         <input type="password" name="password" id="password">
     </div>
     <button type="submit">로그인</button>
-
-    <form method="post" action="{% url 'users:login' %}">
-        {% csrf_token %}
-        {% include 'users/form_errors.html' %} <!-- 코드 추가 -->
-        <div>
-          <label>사용자 ID</label>
-          ...
-    </form>
+    <a href="/">돌아가기</a>
       
 </form>

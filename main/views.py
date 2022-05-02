@@ -1,19 +1,28 @@
 from django.shortcuts import redirect, render
 from .models import Post
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
     return render(request,'main/index.html')
 
 def blog(request):
-    postlist = Post.objects.all()
+    page = request.GET.get('page', '1')  # 페이지
+    postlist = Post.objects.all().order_by('-timestamp')
 
-    return render(request, 'main/blog.html', {'postlist': postlist})
+    paginator = Paginator(postlist, 10)  # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
+    
+    context = {'postlist': page_obj}
+
+    return render(request, 'main/blog.html', context)
 
 def posting(request, pk):
     post = Post.objects.get(pk=pk)
     return render(request, 'main/posting.html', {'post': post})
 
+@login_required(login_url='users:login')
 def new_post(request):
     if request.method == 'POST':
         if request.POST['mainphoto']:
@@ -21,11 +30,13 @@ def new_post(request):
                 postname=request.POST['postname'],
                 contents=request.POST['contents'],
                 mainphoto=request.POST['mainphoto'],
+                author = request.user,
             )
         else:
             new_article=Post.objects.create(
                 postname=request.POST['postname'],
                 contents=request.POST['contents'],
+                author = request.user,
                 #mainphoto=request.POST['mainphoto'],
             )
         return render(request, 'main/posting.html', {'post': new_article})

@@ -1,5 +1,5 @@
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+{% extends 'base.html' %}
+{% block content %}
 
 <h1>로그인</h1>
 <form method="post" action="{% url 'users:login' %}">
@@ -18,3 +18,4 @@
     <a href="/">돌아가기</a>
       
 </form>
+{% endblock %}

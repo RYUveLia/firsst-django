@@ -7,12 +7,6 @@
 <body>
     <a href="blog">
         장고 첫페이지!</a>
-    
-    {% if user.is_authenticated %} 
-        <a href="{% url 'users:logout' %}">{{ user.username }}님 로그아웃</a>
-    {% else %}
-        <a href="{% url 'users:login' %}">로그인</a>
-    {% endif %}
 </body>
 
 {% endblock %}

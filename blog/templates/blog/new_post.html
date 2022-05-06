@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>글쓰기 페이지</h1>
-    <form method="POST" class="my-3">
+    <form action="{% url 'blog:upload_create' %}" method="POST" class="my-3" enctype="multipart/form-data">
         <div class="mb-3"></div>
             {% csrf_token %}
 
@@ -16,7 +16,7 @@
             <label for="content" class="form-lablel">내용</label>
             <textarea name="contents" id="content" class="form-control" rows="10" ></textarea>
             
-            <input type="file" name="mainphoto">
+            <input type="file" name="mainphoto" class="form-control">
             <br>
             <input type="submit" value="글쓰기" class="btn btn-primary">
         </div>

@@ -1,7 +1,9 @@
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, get_user_model
+from django.shortcuts import get_object_or_404, render, redirect
 from users.forms import UserForm
-from django.shortcuts import render
+from blog.models import Post
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -18,3 +20,31 @@ def signup(request):
     else:
         form = UserForm()
     return render(request, 'users/signup.html', {'form': form})
+
+@login_required(login_url='users:login')
+def detail(request, pk):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=pk)
+
+    context = {
+        'user': user
+    }
+
+    return render(request, 'users/detail.html', context)
+
+@login_required(login_url='users:login')
+def mypost(request, pk):
+
+    User = get_user_model()
+    user = get_object_or_404(User, pk=pk)
+
+    page = request.GET.get('page', '1')  # 페이지
+    post = Post.objects.all().order_by('-timestamp')
+    postlist = post.filter(author=user)
+
+    paginator = Paginator(postlist, 10)  # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
+    
+    context = {'postlist': page_obj}
+
+    return render(request, 'users/mypost.html', context)

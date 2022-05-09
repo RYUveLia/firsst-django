@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <head>
+        <title>Posting!</title>
+    </head>
+    <body>
+        <div class="container my-3">
+            <p>
+                <h1>{{post.postname}}</h1>
+            </p>
+
+            <p>{{post.contents}}</p>
+            {% if post.mainphoto %}
+                <img src = "{{ post.mainphoto.url }}" alt="" height="600">
+                <br>
+            {% endif %}
+
+            <!---태그 추가 부분-->
+            <p>
+
+            <label for = "tags">태그</label>
+            <span id = "tags" class = "form-control">
+                {{ post.game.all | join:", "}}
+            </p>
+            <a href="/blog/{{ post.pk }}/remove">삭제</a>
+            <input type="button" value="BACK" onClick="history.back()"> 
+        </div>
+    </body>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+    <title>Blog List</title>
+</head>
+<body>
+    <div class="container my-3">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+            </tr>
+            </thead>
+            {% for list in postlist %}
+            <tr>
+                <td>{{list.pk}}</td>
+                <td><a href="/blog/{{list.pk}}">{{list.postname}}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% include 'pagebar.html' with list=postlist %}
+    </div>
+</body>
+
+{% endblock %}

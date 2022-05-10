@@ -1,20 +1,30 @@
 from django.shortcuts import redirect, render
-
+from django.utils import timezone
 from blog.forms import BoardForm
-from .models import Post, Games
+from .models import Post, Game
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 
 # Create your views here.
 def blog(request):
     page = request.GET.get('page', '1')  # 페이지
+    kw = request.GET.get('kw', '')
     postlist = Post.objects.all().order_by('-timestamp')
+
+    if kw:
+        postlist = postlist.filter(
+            Q(postname__icontains=kw) |  # 제목 검색
+            Q(contents__icontains=kw) |  # 내용 검색            
+            Q(author__username__icontains=kw) |  # 글쓴이 검색
+            Q(game__name=kw)
+        ).distinct()
 
     paginator = Paginator(postlist, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
     
-    context = {'postlist': page_obj}
+    context = {'postlist': page_obj, 'page': page, 'kw': kw}
 
     return render(request, 'blog/index.html', context)
 
@@ -33,7 +43,9 @@ def upload_create(request):
         postname = request.POST['postname'],
         contents = request.POST['contents'],
         author = request.user,
-        mainphoto = request.FILES.get('mainphoto')
+        mainphoto = request.FILES.get('mainphoto'),
+        modified = timezone.now(),
+        timestamp = timezone.now()
     )
 
     new_article.save()
@@ -46,8 +58,11 @@ def upload_create(request):
                 continue
             else:
                 tag_ = tag.strip()
-                new_game = Games(game=tag_)
-                new_game.save()
+                
+                new_game, created = Game.objects.get_or_create(name=tag_)
+                if created == True:
+                    new_game.save()
+
                 new_article.game.add(new_game)
     
     return render(request, 'blog/post_detail.html', {'post': new_article})

@@ -8,4 +8,5 @@ urlpatterns = [
     path('new_post/', new_post, name='new_post'),
     path('<int:pk>/remove/', remove_post),
     path('upload_create/', upload_create ,name="upload_create"),
+    path('<int:pk>/allow/', allow_post, name='allow_post')
 ]

@@ -21,7 +21,6 @@
                 <li>
                     {% if user.is_authenticated %} 
                         <a class="nav-link" href="{% url 'users:detail' user.pk %}">정보보기</a>
-                    {% else %}
                     {% endif %}
                 </li>
                 <li>

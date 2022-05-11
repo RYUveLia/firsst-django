@@ -17,13 +17,21 @@
 
             <!---태그 추가 부분-->
             <p>
-
-            <label for = "tags">태그</label>
-            <span id = "tags" class = "form-control">
+                <label for = "tags">태그</label>
+                <span id = "tags" class = "form-control">
                 {{ post.game.all | join:", "}}
             </p>
+            
+            {% if post.author == request.user %}
+                <form action="{% url 'blog:allow_post' pk=post.pk %}" method="POST" class="my-3">
+                    {% csrf_token %}
+                    <input type="submit" value="10분 연장" class="btn btn-primary">
+                </form>
+            {% endif %}
+            
             <a href="/blog/{{ post.pk }}/remove">삭제</a>
-            <input type="button" value="BACK" onClick="history.back()"> 
+            <input type="button" value="돌아가기" onClick="history.back()">
+            
         </div>
     </body>
 {% endblock %}
